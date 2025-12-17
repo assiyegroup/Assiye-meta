@@ -1,0 +1,16 @@
+sequenceDiagram
+  autonumber
+  participant S as Vendeur (Mobile)
+  participant API as API NestJS
+  participant DB as PostgreSQL
+  participant ST as Supabase Storage (assiye-media)
+
+  S->>API: POST /listings (JWT) + payload annonce
+  API->>DB: INSERT listing
+  DB-->>API: listing_id
+  S->>API: POST /listings/{id}/media (JWT) + image
+  API->>ST: Upload image
+  ST-->>API: media_url
+  API->>DB: INSERT listing_media(media_url)
+  API-->>S: Annonce publiée (détail)
+

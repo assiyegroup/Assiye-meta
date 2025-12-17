@@ -1,0 +1,27 @@
+sequenceDiagram
+  autonumber
+  participant U as Utilisateur (Mobile)
+  participant API as API NestJS
+  participant DB as PostgreSQL
+
+  U->>API: PUT /seller/profile (JWT) {whatsapp, display_name...}
+  API->>DB: upsert seller_profile
+  DB-->>API: ok
+  API-->>U: seller_profile
+
+  U->>API: PUT /seller/location (JWT) {lat,lng,label,address}
+  API->>DB: upsert seller_location
+  DB-->>API: ok
+  API-->>U: seller_location
+
+  U->>API: PUT /seller/location/schedule (JWT) {entries[]}
+  API->>DB: replace schedule entries
+  DB-->>API: ok
+  API-->>U: schedule
+
+  U->>API: POST /seller/activate (JWT)
+  API->>DB: verify completeness + set status=active
+  DB-->>API: ok
+  API-->>U: is_seller_enabled=true
+
+

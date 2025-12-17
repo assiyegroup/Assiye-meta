@@ -1,0 +1,151 @@
+erDiagram
+  USERS {
+    uuid id PK
+    string role
+    string email
+    string phone
+    string password_hash
+    boolean is_active
+    datetime created_at
+  }
+
+  SELLER_PROFILES {
+    uuid id PK
+    uuid user_id FK
+    string display_name
+    string business_type
+    string whatsapp_phone
+    string status
+  }
+
+  SELLER_LOCATION {
+    uuid id PK
+    uuid seller_id FK
+    string label
+    string address_text
+    float lat
+    float lng
+    int radius_m
+  }
+
+  SELLER_LOCATION_SCHEDULE {
+    uuid id PK
+    uuid seller_location_id FK
+    int day_of_week
+    string start_time
+    string end_time
+  }
+
+  CATEGORIES {
+    uuid id PK
+    string name
+    uuid parent_id FK
+    boolean is_active
+  }
+
+  REGIONS {
+    uuid id PK
+    string name
+  }
+
+  CITIES {
+    uuid id PK
+    uuid region_id FK
+    string name
+  }
+
+  LISTINGS {
+    uuid id PK
+    uuid seller_id FK
+    uuid category_id FK
+    uuid city_id FK
+    string title
+    string description
+    boolean price_on_request
+    float price_amount
+    string price_currency
+    string status
+    datetime created_at
+  }
+
+  LISTING_MEDIA {
+    uuid id PK
+    uuid listing_id FK
+    string url
+    int sort_order
+  }
+
+  PROMOTIONS {
+    uuid id PK
+    uuid listing_id FK
+    string type
+    float value
+    string label
+    datetime start_at
+    datetime end_at
+    boolean is_active
+  }
+
+  PUSH_TOKENS {
+    uuid id PK
+    uuid user_id FK
+    string token
+    string platform
+    json device_info
+    datetime created_at
+  }
+
+  NOTIFICATIONS {
+    uuid id PK
+    uuid recipient_id FK
+    string type
+    string message
+    string sent_via
+    datetime sent_at
+    datetime read_at
+    string delivery_status
+  }
+
+  SELLER_FOLLOWS {
+    uuid id PK
+    uuid follower_user_id FK
+    uuid seller_id FK
+    datetime created_at
+  }
+
+  REPORTS {
+    uuid id PK
+    uuid reporter_user_id FK
+    uuid listing_id FK
+    string reason
+    string status
+    datetime created_at
+  }
+
+  ADMIN_ACTIONS {
+    uuid id PK
+    uuid admin_user_id FK
+    string action_type
+    string target_type
+    uuid target_id
+    string note
+    datetime created_at
+  }
+
+  USERS ||--o| SELLER_PROFILES : "has (seller)"
+  SELLER_PROFILES ||--|| SELLER_LOCATION : "has (V1)"
+  SELLER_LOCATION ||--o{ SELLER_LOCATION_SCHEDULE : "has"
+  REGIONS ||--o{ CITIES : "contains"
+  SELLER_PROFILES ||--o{ LISTINGS : "publishes"
+  CATEGORIES ||--o{ LISTINGS : "categorizes"
+  CITIES ||--o{ LISTINGS : "located_in"
+  LISTINGS ||--o{ LISTING_MEDIA : "has"
+  LISTINGS ||--o{ PROMOTIONS : "has"
+  USERS ||--o{ REPORTS : "creates"
+  LISTINGS ||--o{ REPORTS : "receives"
+  USERS ||--o{ ADMIN_ACTIONS : "performs"
+  USERS ||--o{ PUSH_TOKENS : "has"
+  USERS ||--o{ NOTIFICATIONS : "receives"
+  USERS ||--o{ SELLER_FOLLOWS : "follows"
+  SELLER_PROFILES ||--o{ SELLER_FOLLOWS : "is_followed_by"
+

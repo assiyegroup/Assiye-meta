@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph Clients
+    M[Mobile Flutter]
+    W[Dashboard Admin Next.js]
+  end
+
+  subgraph Backend
+    API[NestJS API]
+    DB[(PostgreSQL)]
+    STORE[(Supabase Storage\nBucket médias)]
+    FCM[(Firebase Cloud Messaging)]
+  end
+
+  M -->|HTTPS JSON| API
+  W -->|HTTPS JSON| API
+  API --> DB
+  API --> STORE
+  API -->|Push| FCM
+  FCM -->|Push| M
+
+  %% Note: les abonnements (follow) et l’historique notifications sont en DB
+

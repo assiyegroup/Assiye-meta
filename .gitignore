@@ -1,0 +1,10 @@
+# Ne pas versionner les apps ici : elles ont leurs propres repos
+apps/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+

@@ -1,0 +1,18 @@
+sequenceDiagram
+  autonumber
+  participant U as Utilisateur (Mobile)
+  participant API as API NestJS
+  participant SG as SendGrid
+
+  U->>API: POST /auth/register (email, mdp, phone, role)
+  API->>SG: Envoi OTP (email)
+  SG-->>U: OTP reçu (email)
+  U->>API: POST /auth/verify-otp (email, otp)
+  API-->>U: JWT access token (+ refresh selon stratégie)
+
+  U->>API: POST /auth/login (email, mdp)
+  API->>SG: Envoi OTP (email)
+  SG-->>U: OTP reçu (email)
+  U->>API: POST /auth/verify-otp (email, otp)
+  API-->>U: JWT access token
+
