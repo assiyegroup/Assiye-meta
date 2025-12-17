@@ -1,0 +1,151 @@
+classDiagram
+  class User {
+    +uuid id
+    +string role  %% user|admin_secondary|admin_primary
+    +string email
+    +string phone
+    +bool is_active
+    +datetime created_at
+  }
+
+  class SellerProfile {
+    +uuid id
+    +uuid user_id
+    +string display_name
+    +string whatsapp_phone
+    +string business_type
+    +string status  %% active|warned|suspended
+  }
+
+  class SellerLocation {
+    +uuid id
+    +uuid seller_id
+    +string label
+    +string address_text
+    +float lat
+    +float lng
+    +int radius_m
+  }
+
+  class SellerLocationSchedule {
+    +uuid id
+    +uuid seller_location_id
+    +int day_of_week
+    +string start_time
+    +string end_time
+    +string timezone
+  }
+
+  class Category {
+    +uuid id
+    +string name
+    +uuid parent_id
+    +bool is_active
+  }
+
+  class Region {
+    +uuid id
+    +string name
+  }
+
+  class City {
+    +uuid id
+    +uuid region_id
+    +string name
+  }
+
+  class Listing {
+    +uuid id
+    +uuid seller_id
+    +uuid category_id
+    +uuid city_id
+    +string title
+    +string description
+    +bool price_on_request
+    +float price_amount
+    +string price_currency
+    +string status  %% published|hidden
+  }
+
+  class ListingMedia {
+    +uuid id
+    +uuid listing_id
+    +string url
+    +string storage_key
+    +int sort_order
+  }
+
+  class Promotion {
+    +uuid id
+    +uuid listing_id
+    +string type
+    +float value
+    +string label
+    +datetime start_at
+    +datetime end_at
+    +bool is_active
+  }
+
+  class Report {
+    +uuid id
+    +uuid reporter_user_id
+    +uuid listing_id
+    +string reason
+    +string status
+  }
+
+  class AdminAction {
+    +uuid id
+    +uuid admin_user_id
+    +string action_type
+    +string target_type
+    +uuid target_id
+    +string note
+    +datetime created_at
+  }
+
+  class SellerFollow {
+    +uuid id
+    +uuid follower_user_id
+    +uuid seller_id
+    +datetime created_at
+  }
+
+  class PushToken {
+    +uuid id
+    +uuid user_id
+    +string token
+    +string platform  %% android|ios|web
+    +json device_info
+  }
+
+  class Notification {
+    +uuid id
+    +uuid recipient_id
+    +string type
+    +string message
+    +string sent_via  %% push|sms|email
+    +datetime sent_at
+    +datetime read_at
+    +string delivery_status
+  }
+
+  %% Relations
+  User "1" --> "0..1" SellerProfile : activates seller_mode
+  SellerProfile "1" --> "1" SellerLocation : V1 principal_point
+  SellerLocation "1" --> "1..*" SellerLocationSchedule : schedules
+  SellerProfile "1" --> "0..*" Listing : publishes
+  Listing "1" --> "0..*" ListingMedia : media
+  Listing "1" --> "0..*" Promotion : promotions
+  User "1" --> "0..*" Report : reports
+  Listing "1" --> "0..*" Report : receives
+  User "1" --> "0..*" AdminAction : performs
+  User "1" --> "0..*" SellerFollow : follows
+  SellerProfile "1" --> "0..*" SellerFollow : is_followed_by
+  User "1" --> "0..*" PushToken : has
+  User "1" --> "0..*" Notification : receives
+  Region "1" --> "0..*" City : contains
+  Category "1" --> "0..*" Listing : categorizes
+  City "1" --> "0..*" Listing : located_in
+
+

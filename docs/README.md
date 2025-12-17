@@ -15,6 +15,7 @@ On mettra ici :
 - `13_supabase_storage_policies.md`
 - `schemas/architecture.mmd`
 - `schemas/erd_v1.mmd`
+- `schemas/class_diagram_v1.mmd`
 - `schemas/sequence_auth_otp.mmd`
 - `schemas/sequence_create_listing.mmd`
 - `schemas/sequence_activate_seller.mmd`
